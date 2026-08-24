@@ -11,25 +11,25 @@ import {
   View
 } from 'react-native';
 export default function AddGoalsScreen() {
-  const [name, setName] = useState('');
-  const [goal, setGoal] = useState('');
-  const [unit, setUnit] = useState('');
-  const [per, setPer] = useState('');
+  const [name, setName] = useState('');//creates an array name that starts offf empty and updates using setName
+  const [goal, setGoal] = useState(''); //creates an array goals that starts offf empty and updates using setGoals
+  const [unit, setUnit] = useState('');//creates an array unit that starts offf empty and updates using setUnit
+  const [per, setPer] = useState('');//creates an array per that starts offf empty and updates using setPer
 
-  const handleAddGoal = async () => {
+  const handleAddGoal = async () => { //runs when user presses add goal
     if (!name || !goal) {
-      Alert.alert('Error', 'Please enter a goal name and magnitude.');
+      Alert.alert('Error', 'Please enter a goal name and magnitude.'); //displays message if dont enter goal name and magnitude field
       return;
     }
 
-    await addGoal({
+    await addGoal({ //calls add goal with these paramaters to be written to storage
       name,
       goal: Number(goal),
       unit,
       per,
     });
 
-    setName('');
+    setName(''); //reset the form fields
     setGoal('');
     setUnit('');
     setPer('');
@@ -39,6 +39,7 @@ export default function AddGoalsScreen() {
     router.push('/');
   };
 
+  //UI set up as a form onchangetexts calls set function and onpress calls handleADDGoal function
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Add Goal</Text>
@@ -85,6 +86,7 @@ export default function AddGoalsScreen() {
   );
 }
 
+//design
 const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.surface,

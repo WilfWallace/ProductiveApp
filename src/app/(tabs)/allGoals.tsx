@@ -6,26 +6,27 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ScrollView, Text } from 'react-native';
 
-export default function HomeScreen() {
-  const [goals, setGoals] = useState<Goal[]>([]);
+export default function AllGoalsScreen() {
+  const [goals, setGoals] = useState<Goal[]>([]); //creates an array goals that starts offf empty and updates using setGoals
 
-  const loadGoals = async () => {
-    const data = await getGoals();
-    setGoals(data);
-    console.log('Loaded goals:', data);
-  };
+  const loadGoals = useCallback(async () => { //so react doesnt recreate it on every render
+    const goalsData = await getGoals(); //fetches saved goals from async storage
+    setGoals(goalsData); //updates state, ui refreshes w new goals
+  }, []);
 
-  useFocusEffect(
+  useFocusEffect(//calls load goals when screen focuses
     useCallback(() => {
       loadGoals();
     }, []),
   );
 
-  return (
+  return (//displays goals using GoalTitle object in nice grid format, takes in goals
     <ScrollView style={globalStyles.container}>
       <Text style={globalStyles.title}>Goals</Text>
       <HomeHeader />
-      <GoalTitle goals={goals} />
+      <GoalTitle 
+      goals={goals}
+      />
     </ScrollView>
   );
 }
