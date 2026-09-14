@@ -6,6 +6,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ScrollView, Text } from 'react-native';
 
+
 export default function AllGoalsScreen() {
   const [goals, setGoals] = useState<Goal[]>([]); //creates an array goals that starts offf empty and updates using setGoals
 
@@ -25,7 +26,7 @@ export default function AllGoalsScreen() {
       <Text style={globalStyles.title}>Goals</Text>
       <HomeHeader />
       <GoalTitle 
-      goals={goals}
+      goals={goals} onDelete={loadGoals}
       />
     </ScrollView>
   );

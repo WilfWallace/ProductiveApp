@@ -1,3 +1,4 @@
+import { deleteGoal } from '@/storage/goals';
 import type { Progress } from '@/storage/progress';
 import { colors } from '@/styles/global';
 import React, { useState } from 'react';
@@ -17,6 +18,7 @@ type GoalItemProps = {
   goal: number; //goal magnitude
   unit: string; 
   per: string;
+  onDelete: () => void; //function that runs when goal is deleted, refreshes list of goals
   addProgress: ( //function that stores progress in async storage
     progress: Omit<Progress, 'id' | 'createdAt'>
   ) => Promise<Progress>;
@@ -29,7 +31,15 @@ export default function GoalItem({
   unit,
   per,
   addProgress,
+  onDelete,
 }: GoalItemProps) {
+    const handleLongPress = async () => { { //runs when goal is long pressed, deletes goal
+    console.log('handleLongPress fired');//for debugging purposes
+      await deleteGoal(goalId);
+      onDelete();
+    }
+  };
+
   const [progress, setProgress] = useState(''); //holds text typed into the input, starts empty
 
   const handleAddProgress = async () => { //runs when addprogress is clicked
@@ -49,22 +59,24 @@ export default function GoalItem({
 
   };
 
-  //UI made up of a row of values and a form, need to update to look a lot nicer
+  //UI made up of a row of values and a form, updated with delete goal functionality, looks nicer
   return (
-    <View style={styles.row}>
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.goalItems}>
-        {goal} {unit}/{per}
-      </Text>
-      <TextInput
-        style={[styles.input, styles.rowInput]}
-        placeholder="Enter your progress..."
-        placeholderTextColor={colors.textSecondary}
-        value={progress}
-        onChangeText={setProgress}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleAddProgress}>
-        <Text style={styles.buttonText}>Add Progress</Text>
+    <View style={styles.column}>
+      <TouchableOpacity style={styles.container} onLongPress={handleLongPress} delayLongPress={500}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.goalItems}>
+          {goal} {unit}/{per}
+        </Text>
+        <TextInput
+          style={[styles.input, styles.rowInput]}
+          placeholder="Enter your progress..."
+          placeholderTextColor={colors.textSecondary}
+          value={progress}
+          onChangeText={setProgress}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleAddProgress}>
+          <Text style={styles.buttonText}>Add Progress</Text>
+        </TouchableOpacity>
       </TouchableOpacity>
     </View>
   );
@@ -96,8 +108,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 16,
   },
-  row: {
-    flexDirection: 'row',
+  column: {
+    flexDirection: 'column',
     gap: 10,
   },
   rowInput: {

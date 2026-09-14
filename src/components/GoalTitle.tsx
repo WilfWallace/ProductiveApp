@@ -6,9 +6,10 @@ import GoalItem from './GoalItem';
 
 type GoalTitleProps = {
     goals: Goal[];
+    onDelete: () => void; //function that runs when goal is deleted, refreshes list of goals
 };
 
-export default function GoalTitle({ goals }: GoalTitleProps) {
+export default function GoalTitle({ goals, onDelete }: GoalTitleProps) {
   return (
     <View style={{ marginTop: 30 }}>
       <Text style={globalStyles.sectionTitle}>Goals</Text>
@@ -24,6 +25,7 @@ export default function GoalTitle({ goals }: GoalTitleProps) {
             unit={goal.unit}
             per={goal.per}
             addProgress={addProgress}
+            onDelete={onDelete} 
           />
         ))
       )}
